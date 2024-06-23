@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Resume Screening App</title>
+		<link
+			href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+			rel="stylesheet"
+		/>
+		<style>
+			body {
+				background-color: #f8f9fa;
+			}
+			.container {
+				margin-top: 50px;
+			}
+			.card {
+				padding: 20px;
+				border-radius: 10px;
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+			}
+			.card h1 {
+				font-size: 2em;
+				margin-bottom: 20px;
+			}
+			#result {
+				margin-top: 20px;
+				font-size: 1.2em;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="card">
+				<h1 class="text-center">Resume Screening App</h1>
+				<form
+					action="/upload"
+					method="post"
+					enctype="multipart/form-data"
+					id="uploadForm"
+				>
+					<div class="form-group">
+						<label for="file">Upload Resume:</label>
+						<input
+							type="file"
+							class="form-control"
+							id="file"
+							name="file"
+							accept=".txt,.pdf,.word"
+							required
+						/>
+					</div>
+					<button type="submit" class="btn btn-primary btn-block">
+						Predict
+					</button>
+				</form>
+				<div id="result" class="text-center"></div>
+			</div>
+		</div>
+
+		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+		<script>
+			document
+				.getElementById("uploadForm")
+				.addEventListener("submit", async function (event) {
+					event.preventDefault();
+
+					const formData = new FormData(this);
+					const response = await fetch("/predict", {
+						method: "POST",
+						body: formData,
+					});
+
+					const result = await response.json();
+					document.getElementById(
+						"result"
+					).innerText = `Predicted Category: ${result.prediction}`;
+				});
+		</script>
+	</body>
+</html>
